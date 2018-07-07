@@ -1,0 +1,8 @@
+version: "3"
+services:
+  catalpha:
+    build: .
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "5"

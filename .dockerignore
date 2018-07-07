@@ -1,0 +1,6 @@
+vendor/*
+cmd/discat/vendor/*
+.gitignore
+README.md
+docker-compose.yml
+sample/*
