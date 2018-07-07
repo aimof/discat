@@ -1,4 +1,4 @@
-package catheta
+package discat
 
 import (
 	"encoding/csv"
