@@ -52,3 +52,14 @@ test1case:
 		t.Errorf("case: %s, expected: %s, actual: %s", key, value, actual)
 	}
 }
+
+func TestSpeakRepeat(t *testing.T) {
+	s := newSpeaker([][]string{
+		{"key", "0", "", "", "", "", "", "", ""},
+	})
+	for i := 0; i < 20; i++ {
+		if s.speak("key") == "" {
+			t.Error("Speak returns empty string")
+		}
+	}
+}
