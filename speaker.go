@@ -17,7 +17,11 @@ func newSpeaker(input [][]string) speaker {
 		if len(words) < 2 {
 			continue
 		}
-		s.table[words[0]] = words[1:]
+		for i := 1; i < len(input); i++ {
+			if words[i] != "" {
+				s.table[words[0]] = append(s.table[words[0]], words[i])
+			}
+		}
 	}
 	return s
 }
