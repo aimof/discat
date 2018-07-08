@@ -4,3 +4,6 @@ cmd/discat/vendor/*
 README.md
 docker-compose.yml
 sample/*
+cmd/discat/data/*
+discat
+cmd/discat/discat

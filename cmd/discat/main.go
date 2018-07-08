@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
+	"strings"
 	"syscall"
 
 	"github.com/aimof/discat"
@@ -12,26 +14,29 @@ import (
 )
 
 var (
-	token    string
-	dictPath string
 	name     string
 	nickname string
 	dcat     discat.Discat
 )
 
 func main() {
-	err := readConfig()
+	token, dictPath, err := readConfig()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	s := newStarter(dictPath)
+	s := newStarter(dictPath, "data/level.csv")
 	dict, err := s.readDictionary()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	dcat = discat.Init(dict)
+	levelMap, err := s.readLevel()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	dcat = discat.Init(dict, levelMap)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -56,6 +61,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	levelMap = dcat.Output()
+	s.writeLevel(levelMap)
 }
 
 func handler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -64,10 +72,20 @@ func handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		log.Printf("\t%v\n", err)
 	}
 
+	dcat.GainExp(m.Author.Username, 1)
+
 	var msg string
 	if m.Author.Username != name {
 		log.Printf("\tMessage from %s: %s\n", m.Author.Username, m.Content)
-		msg = dcat.Speak(m)
+		if strings.Contains(m.Content, name) || strings.Contains(m.Content, nickname) {
+			if strings.Contains(m.Content, "!level") {
+				e, l, r := dcat.ShowLevel(m.Author.Username)
+				msg = "Exp: " + strconv.Itoa(e) + ",Level: " + strconv.Itoa(l) + ",Next to: " + strconv.Itoa(r)
+			}
+		}
+		if msg == "" {
+			msg = dcat.Speak(m.Content)
+		}
 	}
 
 	if msg != "" {
@@ -79,16 +97,16 @@ func handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func readConfig() error {
+func readConfig() (token, dictPath string, err error) {
 	file, err := os.Open("config.txt")
 	if err != nil {
-		return err
+		return "", "", err
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	if err != nil {
-		return err
+		return "", "", err
 	}
 
 	var config []string
@@ -97,12 +115,10 @@ func readConfig() error {
 	}
 
 	if scanner.Err() != nil {
-		return scanner.Err()
+		return "", "", scanner.Err()
 	}
 
-	token = config[0]
-	dictPath = config[1]
-	name = config[2]
-	nickname = config[3]
-	return nil
+	name = config[1]
+	nickname = config[2]
+	return config[0], config[3], nil
 }

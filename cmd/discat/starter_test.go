@@ -39,3 +39,48 @@ func TestReadDictionary(t *testing.T) {
 		}
 	}
 }
+
+var mapAndTableCases = []struct {
+	levelMap   map[string]int
+	levelTable [][]string
+	err        error
+}{
+	{
+		levelMap: map[string]int{
+			"case0": 0,
+			"case1": 1,
+			"case2": 16383,
+			"case3": -1,
+		},
+		levelTable: [][]string{
+			{"case0", "0"},
+			{"case1", "1"},
+			{"case2", "16383"},
+			{"case3", "-1"},
+		},
+	},
+}
+
+func TestTableToMap(t *testing.T) {
+	for _, tt := range mapAndTableCases {
+		m, err := tableToMap(tt.levelTable)
+		if !reflect.DeepEqual(err, tt.err) {
+			t.Errorf("expected: %v\n, actual%v", tt.err, err)
+		}
+		if !reflect.DeepEqual(m, tt.levelMap) {
+			t.Errorf("expected: %v\nactual: %v", tt.levelMap, m)
+		}
+	}
+}
+
+func TestMapToTable(t *testing.T) {
+	for _, tt := range mapAndTableCases {
+		if tt.err != nil {
+			continue
+		}
+		tbl := sortTable(mapToTable(tt.levelMap))
+		if !reflect.DeepEqual(tbl, tt.levelTable) {
+			t.Errorf("expected: %v\nactual: %v", tt.levelTable, tbl)
+		}
+	}
+}

@@ -3,7 +3,7 @@ services:
   discat:
     build: .
     volumes:
-      - /home/ubuntu/discat/cmd/discat/data:/go/src/github.com/aimof/discat/cmd/discat/data
+      - /home/aimof/src/github.com/aimof/discat/cmd/discat/data:/go/src/github.com/aimof/discat/cmd/discat/data
     logging:
       options:
         max-size: "10m"

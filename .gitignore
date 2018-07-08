@@ -3,4 +3,5 @@ cmd/discat/vendor/*
 cmd/discat/*.txt
 cmd/discat/discat
 cmd/discat/*.csv
-
+cmd/discat/data/*
+!cmd/discat/data/.gitkeep
