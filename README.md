@@ -21,13 +21,24 @@ So, edit your bot with your non-programmer fiends.
 ### CSV format
 
 ```csv
-word, resp0, resp1, resp2
+word, resp0, resp1, resp2,...
+Hello,Hello\,world!,Hi,...
 ```
 
 ### config.txt format
 
-```txt
-Bot xxx
+```config.txt
+token
+csvpath
 bot_name
-path/to/csv
+bot_nickname
+```
+
+example
+
+```config.txt
+Bot xxx
+bot.csv
+mybot
+mybot
 ```
