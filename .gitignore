@@ -1,4 +1,5 @@
 vendor/*
+docker-compose-local.yml
 cmd/discat/vendor/*
 cmd/discat/*.txt
 cmd/discat/discat
