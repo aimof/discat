@@ -13,8 +13,9 @@ import (
 
 var (
 	token    string
-	name     string
 	dictPath string
+	name     string
+	nickname string
 	dcat     discat.Discat
 )
 
@@ -24,7 +25,13 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	dcat, err = discat.Init(dictPath)
+	s := newStarter(dictPath)
+	dict, err := s.readDictionary()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	dcat = discat.Init(dict)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -94,7 +101,8 @@ func readConfig() error {
 	}
 
 	token = config[0]
-	name = config[1]
-	dictPath = config[2]
+	dictPath = config[1]
+	name = config[2]
+	nickname = config[3]
 	return nil
 }
