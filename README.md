@@ -29,16 +29,16 @@ Hello,Hello\,world!,Hi,...
 
 ```config.txt
 token
-csvpath
 bot_name
 bot_nickname
+csv_dictionary_path
 ```
 
 example
 
 ```config.txt
 Bot xxx
+mybot
+mybot
 bot.csv
-mybot
-mybot
 ```
